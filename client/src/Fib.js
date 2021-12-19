@@ -24,7 +24,9 @@ class Fib extends Component {
     };
 
     async fetchValues(){
+        console.log('fetching values from redis');
         const values = await axios.get('/api/values/current'); 
+        console.log(values);
         this.setState({values: values.data}); 
     };
 
@@ -58,7 +60,7 @@ class Fib extends Component {
                     <label>Enter your index:</label>
                     <input 
                         value={this.state.index}
-                        onChange={ event => this.setState({index: event.target.value})}
+                        onChange={ (event) => this.setState({index: event.target.value})}
                     />
                     <button>Submit</button>
                 </form>
