@@ -1,0 +1,21 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t mmkrasko/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true mmkrasko/react-test npm test
+
+after_success:
+  - docker build -t mmkrasko/complex-client ./client
+  - docker build -t mmkrasko/complex-nginx ./nginx
+  - docker build -t mmkrasko/complex-server ./server
+  - docker build -t mmkrasko/complex-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push mmkrasko/complex-client
+  - docker push mmkrasko/complex-nginx
+  - docker push mmkrasko/complex-server
+  - docker push mmkrasko/complex-worker
+
